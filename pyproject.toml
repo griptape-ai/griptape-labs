@@ -7,14 +7,17 @@ license = "Apache 2.0"
 readme = "README.md"
 repository = "https://github.com/griptape-ai/griptape-labs"
 
+packages = [
+    {include = "griptape"}
+]
+
 [tool.poetry.dependencies]
 python = "^3.9"
 griptape = "*"
 
 [tool.poetry.group.test.dependencies]
-pytest = "~=7.1"
-pytest-cover = "*"
-twine = ">=4"
+pytest = "*"
+pytest-mock = "*"
 
 [build-system]
 requires = ["poetry-core"]
