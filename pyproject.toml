@@ -14,6 +14,9 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.9"
 griptape = "*"
+google-api-python-client ="*"
+google-auth-httplib2 = "*"
+oauth2client = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
