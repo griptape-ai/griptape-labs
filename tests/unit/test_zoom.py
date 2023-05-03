@@ -12,3 +12,9 @@ class TestZoom:
             zoom_api_key="",
             zoom_api_secret="",
         ).list_upcoming_zoom_meetings({"user_id": ""}).value
+
+    def test_create_zoom_meeting(self):
+        assert "error creating zoom meeting" in Zoom(
+            zoom_api_key="",
+            zoom_api_secret="",
+        ).create_zoom_meeting({"user_id": "", "topic": "", "start_time": ""}).value

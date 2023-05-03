@@ -1,5 +1,6 @@
 import json
 import logging
+import datetime
 from griptape.artifacts import BaseArtifact, TextArtifact, ErrorArtifact
 from griptape.core import BaseTool
 from griptape.core.decorators import activity
@@ -9,6 +10,7 @@ from zoomus import ZoomClient
 
 @define
 class Zoom(BaseTool):
+    DATE_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
     zoom_api_key: str = field(default=None, kw_only=True, metadata={"env": "ZOOM_API_KEY"})
     zoom_api_secret: str = field(default=None, kw_only=True, metadata={"env": "ZOOM_API_SECRET"})
 
@@ -56,3 +58,41 @@ class Zoom(BaseTool):
         except Exception as e:
             logging.error(e)
             return ErrorArtifact(f"error retrieving upcoming meetings from Zoom {e}")
+
+    @activity(config={
+        "name": "create_zoom_meeting",
+        "description": "can be used to create a zoom meeting. first, use the list_users activity to get a list of users",
+        "schema": Schema({
+            Literal(
+                "user_id",
+                description="the id of the user that owns the zoom account"
+            ): str,
+            Literal(
+                "topic",
+                description="the topic of the meeting"
+            ): str,
+            Literal(
+                "start_time",
+                description=f"the start time of the meeting in {DATE_FORMAT} format"
+            ): str,
+            Literal(
+                "duration",
+                description="the duration of the meeting in minutes"
+            ): int
+        })
+    })
+    def create_zoom_meeting(self, value: bytes) -> BaseArtifact:
+        zoom_api_key = self.env_value("ZOOM_API_KEY")
+        zoom_api_secret = self.env_value("ZOOM_API_SECRET")
+        try:
+            client = ZoomClient(zoom_api_key, zoom_api_secret)
+            response = client.meeting.create(
+                topic=value.get("topic"),
+                start_time=datetime.datetime.strptime(value.get("start_time"), self.DATE_FORMAT),
+                duration=value.get("duration"),
+                user_id=value.get("user_id")
+            )
+            return TextArtifact(response)
+        except Exception as e:
+            logging.error(e)
+            return ErrorArtifact(f"error creating zoom meeting {e}")
