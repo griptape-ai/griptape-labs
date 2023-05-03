@@ -1,5 +1,5 @@
 import json
-from griptape.artifacts import BaseArtifact, TextArtifact
+from griptape.artifacts import BaseArtifact, TextArtifact, ErrorArtifact
 from griptape.core import BaseTool
 from griptape.core.decorators import activity
 from google.oauth2 import service_account
@@ -23,11 +23,15 @@ class GoogleDrive(BaseTool):
         scopes = ['https://www.googleapis.com/auth/drive.metadata.readonly']
         service_account_creds = json.loads(self.env_value("GOOGLE_SERVICE_ACCOUNT_CREDS"))
 
-        creds = service_account.Credentials.from_service_account_info(service_account_creds, scopes=scopes)
-        service = build('drive', 'v3', credentials=creds)
-        results = service.files().list(
-            pageSize=10, fields="nextPageToken, files(id, name)").execute()
-        items = results.get('files', [])
+        try:
+            creds = service_account.Credentials.from_service_account_info(service_account_creds, scopes=scopes)
+            service = build('drive', 'v3', credentials=creds)
+            results = service.files().list(
+                pageSize=10, fields="nextPageToken, files(id, name)").execute()
+            items = results.get('files', [])
+        except Exception as e:
+            logging.error(e)
+            return ErrorArtifact(f"error searching Drive {e}")
 
         if not items:
             return TextArtifact("No files found.")
