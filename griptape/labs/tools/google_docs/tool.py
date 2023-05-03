@@ -35,6 +35,6 @@ class GoogleDocs(BaseTool):
             return ErrorArtifact(f"error retrieving document {e}")
 
         if not document:
-            return TextArtifact("No document found.")
+            return ErrorArtifact("No document found.")
         else:
             return TextArtifact(document.get('title'))
