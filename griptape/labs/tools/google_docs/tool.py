@@ -1,4 +1,5 @@
 import json
+import logging
 from griptape.artifacts import BaseArtifact, TextArtifact, ErrorArtifact
 from griptape.core import BaseTool
 from griptape.core.decorators import activity
@@ -23,7 +24,12 @@ class GoogleDocs(BaseTool):
     })
     def get_title(self, value: bytes) -> BaseArtifact:
         scopes = ['https://www.googleapis.com/auth/documents.readonly']
-        service_account_creds = json.loads(self.env_value("GOOGLE_SERVICE_ACCOUNT_CREDS"))
+        try:
+            service_account_creds = json.loads(self.env_value("GOOGLE_SERVICE_ACCOUNT_CREDS"))
+        except Exception as e:
+            logging.error(e)
+            return ErrorArtifact(f"error parsing service account creds {e}")
+
         document_id = value.get("document_id")
 
         try:

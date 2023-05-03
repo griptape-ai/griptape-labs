@@ -1,4 +1,5 @@
 import json
+import logging
 import datetime
 from griptape.artifacts import BaseArtifact, TextArtifact, ErrorArtifact
 from griptape.core import BaseTool
@@ -24,7 +25,12 @@ class GoogleCal(BaseTool):
     })
     def get_upcoming_events(self, value: bytes) -> BaseArtifact:
         scopes = ['https://www.googleapis.com/auth/calendar.readonly']
-        service_account_creds = json.loads(self.env_value("GOOGLE_SERVICE_ACCOUNT_CREDS"))
+        try:
+            service_account_creds = json.loads(self.env_value("GOOGLE_SERVICE_ACCOUNT_CREDS"))
+        except Exception as e:
+            logging.error(e)
+            return ErrorArtifact(f"error parsing service account creds {e}")
+
         calendar_id = value.get("calendar_id")
 
         try:
