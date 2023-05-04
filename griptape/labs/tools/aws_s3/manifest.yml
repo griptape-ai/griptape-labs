@@ -1,0 +1,5 @@
+version: "v1"
+name: AWS S3 Tool
+description: Tool for working with AWS S3
+contact_email: hello@griptape.ai
+legal_info_url: https://www.griptape.ai/legal

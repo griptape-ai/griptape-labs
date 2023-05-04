@@ -1,0 +1,5 @@
+version: "v1"
+name: OpenAI Dall-E
+description: Tool for working with Dall-E API.
+contact_email: hello@griptape.ai
+legal_info_url: https://www.griptape.ai/legal

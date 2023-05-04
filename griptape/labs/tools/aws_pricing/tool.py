@@ -9,6 +9,8 @@ import boto3
 
 @define
 class AwsPricing(BaseTool):
+    # these aren't needed for boto3. it's checking ENV vars
+    # remove if this is clear for users
     aws_access_key_id: str = field(default=None, kw_only=True, metadata={"env": "AWS_ACCESS_KEY_ID"})
     aws_secret_access_key: str = field(default=None, kw_only=True, metadata={"env": "AWS_SECRET_ACCESS_KEY"})
 
