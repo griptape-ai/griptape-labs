@@ -6,7 +6,6 @@ from griptape.core import BaseTool
 from griptape.core.decorators import activity
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 from schema import Schema, Literal
 from attr import define, field
 
