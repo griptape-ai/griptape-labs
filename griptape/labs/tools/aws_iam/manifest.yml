@@ -1,0 +1,5 @@
+version: "v1"
+name: AWS Credential Tool
+description: Tool for any services related to credentials, IAM, or profiles in AWS.
+contact_email: hello@griptape.ai
+legal_info_url: https://www.griptape.ai/legal
