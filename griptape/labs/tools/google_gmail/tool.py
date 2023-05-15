@@ -40,7 +40,8 @@ class GoogleGmail(BaseTool):
             ): str
         })
     })
-    def create_draft_email(self, value: dict) -> BaseArtifact:
+    def create_draft_email(self, params: dict) -> BaseArtifact:
+        values = params["values"]
         # Scopes are purposely defined within activity to allow for more granular control
         scopes = ['https://www.googleapis.com/auth/gmail.compose']
         try:
@@ -51,14 +52,14 @@ class GoogleGmail(BaseTool):
 
         try:
             creds = service_account.Credentials.from_service_account_info(service_account_creds, scopes=scopes)
-            delegated_creds = creds.with_subject(value["inbox_owner"])
+            delegated_creds = creds.with_subject(values["inbox_owner"])
             service = build('gmail', 'v1', credentials=delegated_creds)
 
             message = EmailMessage()
-            message.set_content(value["body"])
-            message['To'] = value["to"]
-            message['From'] = value["from"]
-            message['Subject'] = value["subject"]
+            message.set_content(values["body"])
+            message['To'] = values["to"]
+            message['From'] = values["from"]
+            message['Subject'] = values["subject"]
 
             encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
             create_message = {
