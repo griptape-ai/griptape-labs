@@ -10,7 +10,7 @@ class TestAwsPrice:
             "product_family": "Compute Instance",
             "aws_region": "us-east-1"
         }
-        assert isinstance(AwsPricing().get_pricing(value), BaseArtifact)
+        assert isinstance(AwsPricing().get_pricing({"values":value}), BaseArtifact)
         # assert "error retrieving aws pricing info" in AwsPricing(
         #     aws_secret_access_key="",
         #     aws_access_key_id=""

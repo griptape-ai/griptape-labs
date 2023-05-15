@@ -7,7 +7,7 @@ class TestGoogleCal:
         }
         assert "error parsing service account creds" in GoogleCal(
             service_account_creds=""
-        ).get_upcoming_events(value).value
+        ).get_upcoming_events({"values":value}).value
 
     def test_get_events(self):
         value = {
@@ -15,4 +15,4 @@ class TestGoogleCal:
         }
         assert "error retrieving calendar events" in GoogleCal(
             service_account_creds="{}"
-        ).get_upcoming_events(value).value
+        ).get_upcoming_events({"values":value}).value

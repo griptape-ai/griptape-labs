@@ -7,7 +7,7 @@ class TestGoogleDocs:
         }
         assert "error parsing service account creds" in GoogleDocs(
             service_account_creds=""
-        ).get_title(value).value
+        ).get_title({"values":value}).value
 
     def test_get_title(self):
         value = {
@@ -15,4 +15,4 @@ class TestGoogleDocs:
         }
         assert "error retrieving document" in GoogleDocs(
             service_account_creds="{}"
-        ).get_title(value).value
+        ).get_title({"values":value}).value

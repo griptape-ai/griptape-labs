@@ -10,7 +10,7 @@ class TestGoogleGmail:
         }
         assert "error parsing service account creds" in GoogleGmail(
             service_account_creds=""
-        ).create_draft_email(value).value
+        ).create_draft_email({"values":value}).value
 
     def test_get_events(self):
         value = {
@@ -21,4 +21,4 @@ class TestGoogleGmail:
         }
         assert "Error creating draft email" in GoogleGmail(
             service_account_creds="{}"
-        ).create_draft_email(value).value
+        ).create_draft_email({"values":value}).value
