@@ -20,7 +20,8 @@ class GoogleDrive(BaseTool):
             description="path to list all files"
         )
     })
-    def list_files(self, value: bytes) -> BaseArtifact:
+    def list_files(self, params: dict) -> BaseArtifact:
+        # values = params["values"]
         scopes = ['https://www.googleapis.com/auth/drive.metadata.readonly']
         try:
             service_account_creds = json.loads(self.env_value("GOOGLE_SERVICE_ACCOUNT_CREDS"))

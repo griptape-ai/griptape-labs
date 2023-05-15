@@ -22,7 +22,7 @@ class AwsS3(BaseTool):
             ): str
         })
     })
-    def list_buckets(self, value: bytes) -> BaseArtifact:
+    def list_buckets(self, params: dict) -> BaseArtifact:
         try:
             s3 = boto3.client('s3')
             response = s3.list_buckets()
@@ -49,10 +49,11 @@ class AwsS3(BaseTool):
             ): str
         })
     })
-    def upload_file(self, value: bytes) -> BaseArtifact:
+    def upload_file(self, params: dict) -> BaseArtifact:
+        values = params["values"]
         try:
             s3 = boto3.client('s3')
-            response = s3.upload_file(value.get("file_name"), value.get("bucket_name"), value.get("object_name"))
+            response = s3.upload_file(values["file_name"], values["bucket_name"], values["object_name"])
             return TextArtifact(response)
         except Exception as e:
             logging.error(e)

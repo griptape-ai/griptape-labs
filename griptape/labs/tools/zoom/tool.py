@@ -22,7 +22,7 @@ class Zoom(BaseTool):
             description="context of this activity"
         )
     })
-    def list_users(self, value: bytes) -> BaseArtifact:
+    def list_users(self, param: dict) -> BaseArtifact:
         zoom_api_key = self.env_value("ZOOM_API_KEY")
         zoom_api_secret = self.env_value("ZOOM_API_SECRET")
         try:
@@ -46,12 +46,13 @@ class Zoom(BaseTool):
             ): str
         })
     })
-    def list_upcoming_zoom_meetings(self, value: bytes) -> BaseArtifact:
+    def list_upcoming_zoom_meetings(self, params: dict) -> BaseArtifact:
+        values = params["values"]
         zoom_api_key = self.env_value("ZOOM_API_KEY")
         zoom_api_secret = self.env_value("ZOOM_API_SECRET")
         try:
             client = ZoomClient(zoom_api_key, zoom_api_secret)
-            meeting_list = json.loads(client.meeting.list(user_id=value.get("user_id")).content)
+            meeting_list = json.loads(client.meeting.list(user_id=values["user_id"]).content)
             if meeting_list.get("code") == 124:
                 return ErrorArtifact(f"error retrieving upcoming meetings from Zoom {meeting_list.get('message')}")
             return TextArtifact(meeting_list)
@@ -81,16 +82,17 @@ class Zoom(BaseTool):
             ): int
         })
     })
-    def create_zoom_meeting(self, value: bytes) -> BaseArtifact:
+    def create_zoom_meeting(self, params: dict) -> BaseArtifact:
+        values = params["values"]
         zoom_api_key = self.env_value("ZOOM_API_KEY")
         zoom_api_secret = self.env_value("ZOOM_API_SECRET")
         try:
             client = ZoomClient(zoom_api_key, zoom_api_secret)
             response = client.meeting.create(
-                topic=value.get("topic"),
-                start_time=datetime.datetime.strptime(value.get("start_time"), self.DATE_FORMAT),
-                duration=value.get("duration"),
-                user_id=value.get("user_id")
+                topic=values["topic"],
+                start_time=datetime.datetime.strptime(values["start_time"], self.DATE_FORMAT),
+                duration=values["duration"],
+                user_id=values["user_id"]
             )
             return TextArtifact(response)
         except Exception as e:

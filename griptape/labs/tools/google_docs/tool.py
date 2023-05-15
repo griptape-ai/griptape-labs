@@ -22,7 +22,8 @@ class GoogleDocs(BaseTool):
             ): str
         })
     })
-    def get_title(self, value: bytes) -> BaseArtifact:
+    def get_title(self, params: dict) -> BaseArtifact:
+        values = params["values"]
         scopes = ['https://www.googleapis.com/auth/documents.readonly']
         try:
             service_account_creds = json.loads(self.env_value("GOOGLE_SERVICE_ACCOUNT_CREDS"))
@@ -30,7 +31,7 @@ class GoogleDocs(BaseTool):
             logging.error(e)
             return ErrorArtifact(f"error parsing service account creds {e}")
 
-        document_id = value.get("document_id")
+        document_id = values["document_id"]
 
         try:
             creds = service_account.Credentials.from_service_account_info(service_account_creds, scopes=scopes)

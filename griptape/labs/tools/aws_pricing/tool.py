@@ -11,7 +11,6 @@ import boto3
 class AwsPricing(BaseTool):
     aws_access_key_id: str = field(default=None, kw_only=True, metadata={"env": "AWS_ACCESS_KEY_ID"})
     aws_secret_access_key: str = field(default=None, kw_only=True, metadata={"env": "AWS_SECRET_ACCESS_KEY"})
-
     @activity(config={
         "name": "get_pricing",
         "description": "can be used to get pricing information about aws services",
@@ -34,17 +33,18 @@ class AwsPricing(BaseTool):
             ): str
         })
     })
-    def get_pricing(self, value: bytes) -> BaseArtifact:
+    def get_pricing(self, params: dict) -> BaseArtifact:
+        values = params["values"]
         try:
-            session = boto3.session.Session(region_name=value.get("aws_region"))
+            session = boto3.session.Session(region_name=values["aws_region"])
             client = session.client("pricing")
             prices = client.get_products(
-                ServiceCode=value.get("service_code"),
+                ServiceCode=values["service_code"],
                 Filters=[
                     {
-                        'Type': value.get("filter_type"),
+                        'Type': values["filter_type"],
                         'Field': 'productFamily',
-                        'Value': value.get("product_family")
+                        'Value': values["product_family"]
                     }
                 ]
             )

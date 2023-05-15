@@ -20,5 +20,5 @@ class AwsPricing(BaseTool):
             description="context of this activity"
         )
     })
-    def get_caller_identity(self, value: bytes) -> BaseArtifact:
+    def get_caller_identity(self, params: dict) -> BaseArtifact:
         return BaseArtifact("not implemented")

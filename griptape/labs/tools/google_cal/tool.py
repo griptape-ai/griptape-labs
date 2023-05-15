@@ -22,7 +22,8 @@ class GoogleCal(BaseTool):
             ): str
         })
     })
-    def get_upcoming_events(self, value: bytes) -> BaseArtifact:
+    def get_upcoming_events(self, params: dict) -> BaseArtifact:
+        values = params["values"]
         scopes = ['https://www.googleapis.com/auth/calendar.readonly']
         try:
             service_account_creds = json.loads(self.env_value("GOOGLE_SERVICE_ACCOUNT_CREDS"))
@@ -30,7 +31,7 @@ class GoogleCal(BaseTool):
             logging.error(e)
             return ErrorArtifact(f"error parsing service account creds {e}")
 
-        calendar_id = value.get("calendar_id")
+        calendar_id = values["calendar_id"]
 
         try:
             creds = service_account.Credentials.from_service_account_info(service_account_creds, scopes=scopes)

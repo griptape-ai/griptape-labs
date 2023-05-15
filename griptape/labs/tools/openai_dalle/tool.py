@@ -30,13 +30,14 @@ class OpenAiDallE(BaseTool):
             ): str
         })
     })
-    def create_image(self, value: bytes) -> BaseArtifact:
+    def create_image(self, params: dict) -> BaseArtifact:
+        values = params["values"]
         try:
             openai.api_key = self.env_value("OPENAI_API_KEY")
             response = openai.Image.create(
-                prompt=value.get("prompt"),
+                prompt=values["prompt"],
                 n=1,
-                size=value.get("size")
+                size=values["size"]
             )
             return TextArtifact(response)
         except Exception as e:
