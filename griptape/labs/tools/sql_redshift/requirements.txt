@@ -1,0 +1,4 @@
+griptape==0.8.1
+sqlalchemy~=2.0
+sqlalchemy-redshift
+redshift_connector

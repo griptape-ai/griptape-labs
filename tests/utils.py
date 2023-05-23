@@ -13,5 +13,5 @@ def install_requirements(tool: str) -> None:
         "pip",
         "install",
         "-r",
-        os.path.join(abs_tool_path(tool), "requirements.txt")
+        os.path.join(abs_tool_path(tool), "manifest.yml")
     ])

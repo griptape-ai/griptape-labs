@@ -1,0 +1,5 @@
+version: "v1"
+name: Stable Animation Tool
+description: Tool for using the Animation SDK from Stability AI.
+contact_email: hello@griptape.ai
+legal_info_url: https://www.griptape.ai/legal

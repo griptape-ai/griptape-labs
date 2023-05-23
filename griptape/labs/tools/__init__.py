@@ -6,6 +6,7 @@ from .aws_pricing.tool import AwsPricing
 from .aws_s3.tool import AwsS3
 from .zoom.tool import Zoom
 from .openai_dalle.tool import OpenAiDallE
+from .sql_redshift.tool import SqlRedshiftClient
 
 __all__ = [
     "GoogleDrive",
@@ -15,5 +16,6 @@ __all__ = [
     "AwsPricing",
     "AwsS3",
     "Zoom",
-    "OpenAiDallE"
+    "OpenAiDallE",
+    "SqlRedshiftClient"
 ]

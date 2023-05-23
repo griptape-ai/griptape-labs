@@ -18,6 +18,7 @@ google-api-python-client ="*"
 google-auth-httplib2 = "*"
 oauth2client = "*"
 zoomus = "*"
+stability-sdk = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
