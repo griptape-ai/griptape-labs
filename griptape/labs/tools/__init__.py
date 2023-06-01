@@ -4,6 +4,7 @@ from .google_cal.tool import GoogleCal
 from .google_gmail.tool import GoogleGmail
 from .aws_pricing.tool import AwsPricing
 from .aws_s3.tool import AwsS3
+from .aws_kendra.tool import AwsKendraClient
 from .zoom.tool import Zoom
 from .openai_dalle.tool import OpenAiDallE
 from .sql_redshift.tool import SqlRedshiftClient
@@ -15,6 +16,7 @@ __all__ = [
     "GoogleGmail",
     "AwsPricing",
     "AwsS3",
+    "AwsKendraClient",
     "Zoom",
     "OpenAiDallE",
     "SqlRedshiftClient"
