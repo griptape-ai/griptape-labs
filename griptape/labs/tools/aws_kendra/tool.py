@@ -16,7 +16,7 @@ class AwsKendraClient(BaseTool):
         "description": "Can be used to query an AWS Kendra index.",
         "schema": Schema({
             Literal(
-                "queryText",
+                "query_text",
                 description="The query text passed to the AWS Kendra index.",
             ): str,
         })
@@ -24,7 +24,7 @@ class AwsKendraClient(BaseTool):
     def query(self, params: dict) -> BaseArtifact:
         try:
             kendra = boto3.client('kendra')
-            query_text = params['values']["queryText"]
+            query_text = params['values']["query_text"]
             response = kendra.query(IndexId=self.index_id, QueryText=query_text)
             response_text = ''
             for query_result in response["ResultItems"]:
