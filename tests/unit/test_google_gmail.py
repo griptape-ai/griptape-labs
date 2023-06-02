@@ -1,5 +1,6 @@
 from griptape.labs.tools import GoogleGmail
 
+
 class TestGoogleGmail:
     def test_create_draft_email_non_json_creds(self):
         value = {

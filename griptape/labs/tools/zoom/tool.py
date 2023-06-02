@@ -11,8 +11,8 @@ from zoomus import ZoomClient
 @define
 class Zoom(BaseTool):
     DATE_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
-    zoom_api_key: str = field(default=None, kw_only=True, metadata={"env": "ZOOM_API_KEY"})
-    zoom_api_secret: str = field(default=None, kw_only=True, metadata={"env": "ZOOM_API_SECRET"})
+    zoom_api_key: str = field(kw_only=True)
+    zoom_api_secret: str = field(kw_only=True)
 
     @activity(config={
         "name": "list_users",
@@ -23,8 +23,9 @@ class Zoom(BaseTool):
         )
     })
     def list_users(self, param: dict) -> BaseArtifact:
-        zoom_api_key = self.env_value("ZOOM_API_KEY")
-        zoom_api_secret = self.env_value("ZOOM_API_SECRET")
+        zoom_api_key = self.zoom_api_key
+        zoom_api_secret = self.zoom_api_secret
+
         try:
             client = ZoomClient(zoom_api_key, zoom_api_secret)
             users_response = client.user.list()
@@ -48,8 +49,9 @@ class Zoom(BaseTool):
     })
     def list_upcoming_zoom_meetings(self, params: dict) -> BaseArtifact:
         values = params["values"]
-        zoom_api_key = self.env_value("ZOOM_API_KEY")
-        zoom_api_secret = self.env_value("ZOOM_API_SECRET")
+        zoom_api_key = self.zoom_api_key
+        zoom_api_secret = self.zoom_api_secret
+
         try:
             client = ZoomClient(zoom_api_key, zoom_api_secret)
             meeting_list = json.loads(client.meeting.list(user_id=values["user_id"]).content)
@@ -84,8 +86,9 @@ class Zoom(BaseTool):
     })
     def create_zoom_meeting(self, params: dict) -> BaseArtifact:
         values = params["values"]
-        zoom_api_key = self.env_value("ZOOM_API_KEY")
-        zoom_api_secret = self.env_value("ZOOM_API_SECRET")
+        zoom_api_key = self.zoom_api_key
+        zoom_api_secret = self.zoom_api_secret
+
         try:
             client = ZoomClient(zoom_api_key, zoom_api_secret)
             response = client.meeting.create(

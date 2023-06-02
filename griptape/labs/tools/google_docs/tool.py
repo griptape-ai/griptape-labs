@@ -11,9 +11,9 @@ from attr import define, field
 
 @define
 class GoogleDocs(BaseTool):
-    service_account_creds: str = field(default=None, kw_only=True, metadata={"env": "GOOGLE_SERVICE_ACCOUNT_CREDS"})
+    service_account_creds: str = field(kw_only=True)
+
     @activity(config={
-        "name": "get_title",
         "description": "Can be used to get title of a google doc",
         "schema": Schema({
             Literal(
@@ -26,7 +26,7 @@ class GoogleDocs(BaseTool):
         values = params["values"]
         scopes = ['https://www.googleapis.com/auth/documents.readonly']
         try:
-            service_account_creds = json.loads(self.env_value("GOOGLE_SERVICE_ACCOUNT_CREDS"))
+            service_account_creds = json.loads(self.service_account_creds)
         except Exception as e:
             logging.error(e)
             return ErrorArtifact(f"error parsing service account creds {e}")

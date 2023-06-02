@@ -1,5 +1,6 @@
 from griptape.labs.tools import Zoom
 
+
 class TestZoom:
     def test_list_users(self):
         assert "error retrieving user list from Zoom" in Zoom(

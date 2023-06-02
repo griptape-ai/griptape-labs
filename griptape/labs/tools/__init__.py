@@ -7,6 +7,7 @@ from .aws_s3.tool import AwsS3
 from .zoom.tool import Zoom
 from .openai_dalle.tool import OpenAiDallE
 from .sql_redshift.tool import SqlRedshiftClient
+from .pdf_reader.tool import PdfReader
 
 __all__ = [
     "GoogleDrive",
@@ -17,5 +18,6 @@ __all__ = [
     "AwsS3",
     "Zoom",
     "OpenAiDallE",
-    "SqlRedshiftClient"
+    "SqlRedshiftClient",
+    "PdfReader"
 ]

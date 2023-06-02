@@ -12,13 +12,14 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9"
-griptape = "*"
+python = ">=3.9,<3.12"
+griptape = ">=0.10"
 google-api-python-client ="*"
 google-auth-httplib2 = "*"
 oauth2client = "*"
 zoomus = "*"
 stability-sdk = "*"
+pytest = "^7.3.1"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
