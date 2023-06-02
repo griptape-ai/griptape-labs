@@ -9,7 +9,7 @@ import boto3
 
 @define
 class AwsKendraClient(BaseTool):
-    index_id: str = field(default=None, kw_only=True)
+    index_id: str = field(kw_only=True)
 
     @activity(config={
         "name": "query",
