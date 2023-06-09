@@ -10,12 +10,12 @@ from griptape.core.decorators import activity
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
+
 @define
 class GoogleGmail(BaseTool):
-    service_account_creds: str = field(default=None, kw_only=True, metadata={"env": "GOOGLE_SERVICE_ACCOUNT_CREDS"})
+    service_account_creds: str = field(kw_only=True)
 
     @activity(config={
-        "name": "create_draft_email",
         "description": "Can be used to create a draft email in gmail",
         "schema": Schema({
             Literal(
@@ -36,7 +36,8 @@ class GoogleGmail(BaseTool):
             ): str,
             Literal(
                 "inbox_owner",
-                description="email address of the inbox owner where the draft will be created. if not provided, use the from address"
+                description="email address of the inbox owner where the draft will be created. "
+                            "if not provided, use the from address"
             ): str
         })
     })
@@ -45,7 +46,7 @@ class GoogleGmail(BaseTool):
         # Scopes are purposely defined within activity to allow for more granular control
         scopes = ['https://www.googleapis.com/auth/gmail.compose']
         try:
-            service_account_creds = json.loads(self.env_value("GOOGLE_SERVICE_ACCOUNT_CREDS"))
+            service_account_creds = json.loads(self.service_account_creds)
         except Exception as e:
             logging.error(e)
             return ErrorArtifact(f"error parsing service account creds {e}")

@@ -9,11 +9,12 @@ from googleapiclient.discovery import build
 from schema import Schema, Literal
 from attr import define, field
 
+
 @define
 class GoogleCal(BaseTool):
-    service_account_creds: str = field(default=None, kw_only=True, metadata={"env": "GOOGLE_SERVICE_ACCOUNT_CREDS"})
+    service_account_creds: str = field(kw_only=True)
+
     @activity(config={
-        "name": "get_upcoming_events",
         "description": "Can be used to get upcoming events from a google calendar",
         "schema": Schema({
             Literal(
@@ -26,7 +27,7 @@ class GoogleCal(BaseTool):
         values = params["values"]
         scopes = ['https://www.googleapis.com/auth/calendar.readonly']
         try:
-            service_account_creds = json.loads(self.env_value("GOOGLE_SERVICE_ACCOUNT_CREDS"))
+            service_account_creds = json.loads(self.service_account_creds)
         except Exception as e:
             logging.error(e)
             return ErrorArtifact(f"error parsing service account creds {e}")

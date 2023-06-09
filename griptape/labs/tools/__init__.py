@@ -8,6 +8,7 @@ from .zoom.tool import Zoom
 from .openai_dalle.tool import OpenAiDallE
 from .sql_redshift.tool import SqlRedshiftClient
 from .proxycurl.tool import ProxycurlClient
+from .pdf_reader.tool import PdfReader
 
 __all__ = [
     "GoogleDrive",
@@ -19,5 +20,6 @@ __all__ = [
     "Zoom",
     "OpenAiDallE",
     "SqlRedshiftClient",
-    "ProxycurlClient"
+    "ProxycurlClient",
+    "PdfReader"
 ]

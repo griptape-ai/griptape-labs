@@ -11,9 +11,9 @@ from attr import define, field
 
 @define
 class GoogleDrive(BaseTool):
-    service_account_creds: str = field(default=None, kw_only=True, metadata={"env": "GOOGLE_SERVICE_ACCOUNT_CREDS"})
+    service_account_creds: str = field(kw_only=True)
+
     @activity(config={
-        "name": "list_files",
         "description": "Can be used to list all files in a google drive",
         "schema": Schema(
             str,
@@ -24,7 +24,7 @@ class GoogleDrive(BaseTool):
         # values = params["values"]
         scopes = ['https://www.googleapis.com/auth/drive.metadata.readonly']
         try:
-            service_account_creds = json.loads(self.env_value("GOOGLE_SERVICE_ACCOUNT_CREDS"))
+            service_account_creds = json.loads(self.service_account_creds)
         except Exception as e:
             logging.error(e)
             return ErrorArtifact(f"error parsing service account creds {e}")
