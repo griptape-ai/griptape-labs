@@ -7,6 +7,7 @@ from .aws_s3.tool import AwsS3
 from .zoom.tool import Zoom
 from .openai_dalle.tool import OpenAiDallE
 from .sql_redshift.tool import SqlRedshiftClient
+from .proxycurl_client.tool import ProxycurlClient
 from .pdf_reader.tool import PdfReader
 
 __all__ = [
@@ -19,5 +20,6 @@ __all__ = [
     "Zoom",
     "OpenAiDallE",
     "SqlRedshiftClient",
+    "ProxycurlClient",
     "PdfReader"
 ]
