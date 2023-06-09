@@ -26,7 +26,7 @@ class ProxycurlClient(BaseTool):
     )
     def get_profile(self, params: dict) -> BaseArtifact:
         profile_id = params["values"]["profile_id"]
-        headers = {"Authorization": "Bearer " + self.api_key}
+        headers = {"Authorization": f"Bearer {self.api_key}"}
         params = {
             "url": f"https://www.linkedin.com/in/{profile_id}",
         }
