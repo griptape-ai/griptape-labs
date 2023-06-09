@@ -1,14 +1,14 @@
 from griptape.artifacts import BaseArtifact, TextArtifact, ErrorArtifact
 from griptape.core import BaseTool
 from griptape.core.decorators import activity
-from schema import Schema, Literal, Optional
+from schema import Schema, Literal
 from attr import define, field
 import requests
 
 
 @define
 class ProxycurlClient(BaseTool):
-    api_key: Optional[str] = field(kw_only=True)
+    api_key: str = field(kw_only=True)
 
     api_endpoint: str = field(
         default="https://nubela.co/proxycurl/api/v2/linkedin", kw_only=True
