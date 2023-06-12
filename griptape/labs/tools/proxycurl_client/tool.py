@@ -36,7 +36,7 @@ class ProxycurlClient(BaseTool):
         )
 
         if response.status_code == 200:
-            return TextArtifact(response.json())
+            return TextArtifact(response.text)
         return ErrorArtifact(
             f"Proxycurl returned an error with status code "
             f"{response.status_code} and reason '{response.reason}'"
