@@ -11,17 +11,21 @@ class ProxycurlClient(BaseTool):
     api_key: str = field(kw_only=True)
 
     api_endpoint: str = field(
-        default="https://nubela.co/proxycurl/api/v2/linkedin", kw_only=True
+        default="https://nubela.co/proxycurl/api/v2/linkedin",
+        kw_only=True
     )
 
     timeout = field(default=30, kw_only=True)
 
     @activity(
         config={
-            "description": "Can be used to get a user's LinkedIn profile information.",
-            "schema": Schema(
-                {Literal("profile_id", description="Profile id of LinkedIn user."): str}
-            ),
+            "description": "Can be used to get LinkedIn profile information for people",
+            "schema": Schema({
+                Literal(
+                    "profile_id",
+                    description="LinkedIn profile ID (i.e., https://www.linkedin.com/in/<profile_id>)"
+                ): str
+            }),
         }
     )
     def get_profile(self, params: dict) -> BaseArtifact:
@@ -37,7 +41,8 @@ class ProxycurlClient(BaseTool):
 
         if response.status_code == 200:
             return TextArtifact(response.text)
-        return ErrorArtifact(
-            f"Proxycurl returned an error with status code "
-            f"{response.status_code} and reason '{response.reason}'"
-        )
+        else:
+            return ErrorArtifact(
+                f"Proxycurl returned an error with status code "
+                f"{response.status_code} and reason '{response.reason}'"
+            )
