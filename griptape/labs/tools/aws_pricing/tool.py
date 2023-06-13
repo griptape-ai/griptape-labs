@@ -7,12 +7,13 @@ from schema import Schema, Literal
 from attr import define, field
 import boto3
 
+
 @define
 class AwsPricing(BaseTool):
     aws_access_key_id: str = field(default=None, kw_only=True, metadata={"env": "AWS_ACCESS_KEY_ID"})
     aws_secret_access_key: str = field(default=None, kw_only=True, metadata={"env": "AWS_SECRET_ACCESS_KEY"})
+
     @activity(config={
-        "name": "get_pricing",
         "description": "can be used to get pricing information about aws services",
         "schema": Schema({
             Literal(

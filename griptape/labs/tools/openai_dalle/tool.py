@@ -1,6 +1,4 @@
-import json
 import logging
-import os
 from griptape.artifacts import BaseArtifact, TextArtifact, ErrorArtifact
 from griptape.core import BaseTool
 from griptape.core.decorators import activity
@@ -8,12 +6,12 @@ from schema import Schema, Literal
 from attr import define, field
 import openai
 
+
 @define
 class OpenAiDallE(BaseTool):
     openai_api_key: str = field(default=None, kw_only=True, metadata={"env": "OPENAI_API_KEY"})
 
     @activity(config={
-        "name": "create_image",
         "description": "can be used to create an image from text",
         "schema": Schema({
             Literal(

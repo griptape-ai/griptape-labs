@@ -13,7 +13,6 @@ class AwsS3(BaseTool):
     aws_secret_access_key: str = field(default=None, kw_only=True, metadata={"env": "AWS_SECRET_ACCESS_KEY"})
 
     @activity(config={
-        "name": "list_buckets",
         "description": "can be used to list all s3 buckets in an aws account",
         "schema":  Schema({
             Literal(
@@ -32,7 +31,6 @@ class AwsS3(BaseTool):
             return ErrorArtifact(f"error retrieving s3 buckets {e}")
 
     @activity(config={
-        "name": "upload_file",
         "description": "can be used to upload a file to an s3 bucket",
         "schema": Schema({
             Literal(

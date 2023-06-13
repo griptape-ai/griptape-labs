@@ -1,11 +1,9 @@
-import json
-import logging
-from griptape.artifacts import BaseArtifact, TextArtifact, ErrorArtifact
+from attr import define, field
+from griptape.artifacts import BaseArtifact
 from griptape.core import BaseTool
 from griptape.core.decorators import activity
-from schema import Schema, Literal
-from attr import define, field
-import boto3
+from schema import Schema
+
 
 @define
 class AwsPricing(BaseTool):
@@ -13,7 +11,6 @@ class AwsPricing(BaseTool):
     aws_secret_access_key: str = field(default=None, kw_only=True, metadata={"env": "AWS_SECRET_ACCESS_KEY"})
 
     @activity(config={
-        "name": "get_caller_identity",
         "description": "can be used to get the account or IAM principal of the caller",
         "schema": Schema(
             str,

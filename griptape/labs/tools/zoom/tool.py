@@ -8,6 +8,7 @@ from schema import Schema, Literal
 from attr import define, field
 from zoomus import ZoomClient
 
+
 @define
 class Zoom(BaseTool):
     DATE_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
@@ -15,7 +16,6 @@ class Zoom(BaseTool):
     zoom_api_secret: str = field(kw_only=True)
 
     @activity(config={
-        "name": "list_users",
         "description": "Can be used to list all users in a zoom account",
         "schema": Schema(
             str,
@@ -38,7 +38,6 @@ class Zoom(BaseTool):
             return ErrorArtifact(f"error retrieving user list from Zoom {e}")
 
     @activity(config={
-        "name": "list_upcoming_zoom_meetings",
         "description": "can be used to list upcoming zoom meetings",
         "schema": Schema({
             Literal(
@@ -63,7 +62,6 @@ class Zoom(BaseTool):
             return ErrorArtifact(f"error retrieving upcoming meetings from Zoom {e}")
 
     @activity(config={
-        "name": "create_zoom_meeting",
         "description": "can be used to create a zoom meeting. first, use the list_users activity to get a list of users",
         "schema": Schema({
             Literal(
