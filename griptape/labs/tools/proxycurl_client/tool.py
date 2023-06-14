@@ -1,4 +1,5 @@
-from griptape.artifacts import BaseArtifact, TextArtifact, ErrorArtifact, ListArtifact
+from typing import Union
+from griptape.artifacts import TextArtifact, ErrorArtifact
 from griptape.core import BaseTool
 from griptape.core.decorators import activity
 from schema import Schema, Literal
@@ -26,7 +27,7 @@ class ProxycurlClient(BaseTool):
             }),
         }
     )
-    def get_profile(self, params: dict) -> BaseArtifact:
+    def get_profile(self, params: dict) -> Union[list[TextArtifact], ErrorArtifact]:
         profile_id = params["values"]["profile_id"]
         headers = {"Authorization": f"Bearer {self.api_key}"}
         params = self.get_profile_params
@@ -38,10 +39,10 @@ class ProxycurlClient(BaseTool):
         )
 
         if response.status_code == 200:
-            return ListArtifact.from_list([
+            return [
                 TextArtifact(str({key: value}))
                 for key, value in response.json().items()
-            ])
+            ]
         else:
             return ErrorArtifact(
                 f"Proxycurl returned an error with status code "
