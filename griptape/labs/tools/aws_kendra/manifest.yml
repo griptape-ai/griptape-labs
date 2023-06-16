@@ -1,0 +1,5 @@
+version: "v1"
+name: AWS Kendra Tool
+description: Tool for AWS Kendra 
+contact_email: hello@griptape.ai
+legal_info_url: https://www.griptape.ai/legal
