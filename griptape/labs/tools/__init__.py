@@ -9,6 +9,7 @@ from .openai_dalle.tool import OpenAiDallE
 from .sql_redshift.tool import SqlRedshiftClient
 from .proxycurl_client.tool import ProxycurlClient
 from .pdf_reader.tool import PdfReader
+from .aws_cli.tool import AwsCli
 
 __all__ = [
     "GoogleDrive",
@@ -21,5 +22,6 @@ __all__ = [
     "OpenAiDallE",
     "SqlRedshiftClient",
     "ProxycurlClient",
-    "PdfReader"
+    "PdfReader",
+    "AwsCli"
 ]
