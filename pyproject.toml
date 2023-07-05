@@ -14,7 +14,8 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.9"
 
-griptape = { git = "https://github.com/griptape-ai/griptape.git", branch = "main" }
+griptape = ">= 0.12.2"
+
 google-api-python-client ="*"
 google-auth-httplib2 = "*"
 oauth2client = "*"
