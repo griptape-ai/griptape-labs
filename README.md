@@ -17,13 +17,19 @@ To install it with pip:
 pip install git+https://github.com/griptape-ai/griptape-labs.git@stable
 ```
 
+Or add it to the `requirements.txt` file:
+
+```
+griptape-labs @ git+https://github.com/griptape-ai/griptape-labs.git@stable
+```
+
 To install it with Poetry:
 
 ```shell
 poetry add git+ssh://github.com/griptape-ai/griptape-labs.git#stable
 ```
 
-or add it directly to `pyproject.toml`:
+Or add it directly to `pyproject.toml`:
 
 ```toml
 griptape = { git = "https://github.com/griptape-ai/griptape-labs.git", tag = "stable" }
