@@ -1,0 +1,5 @@
+version: "v1"
+name: Autodesk Shotgrid Client
+description: Tool for Autodesk Shotgrid python API
+contact_email: jason@griptape.ai
+legal_info_url: https://www.griptape.ai/legal
