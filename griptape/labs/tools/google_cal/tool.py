@@ -1,49 +1,42 @@
-import json
 import logging
 import datetime
 from griptape.artifacts import BaseArtifact, TextArtifact, ErrorArtifact
-from griptape.core import BaseTool
-from griptape.core.decorators import activity
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-from schema import Schema, Literal
-from attr import define, field
+from griptape.utils.decorators import activity
+from attr import define
+
+from griptape.labs.tools.base_google_tool import BaseGoogleTool
 
 
 @define
-class GoogleCal(BaseTool):
-    service_account_creds: str = field(kw_only=True)
+class GoogleCalTool(BaseGoogleTool):
+    READ_CALENDAR_SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 
-    @activity(config={
-        "description": "Can be used to get upcoming events from a google calendar",
-        "schema": Schema({
-            Literal(
-                "calendar_id",
-                description="id of the google calendar such as 'primary'"
-            ): str
-        })
-    })
+    @activity(
+        config={
+            "description": "Can be used to get upcoming events from a google calendar",
+        }
+    )
     def get_upcoming_events(self, params: dict) -> BaseArtifact:
-        values = params["values"]
-        scopes = ['https://www.googleapis.com/auth/calendar.readonly']
         try:
-            service_account_creds = json.loads(self.service_account_creds)
-        except Exception as e:
-            logging.error(e)
-            return ErrorArtifact(f"error parsing service account creds {e}")
+            service = self._build_client(
+                scopes=self.READ_CALENDAR_SCOPES,
+                service_name="calendar",
+                version="v3",
+            )
+            now = datetime.datetime.now(datetime.timezone.utc).isoformat()
 
-        calendar_id = values["calendar_id"]
-
-        try:
-            creds = service_account.Credentials.from_service_account_info(service_account_creds, scopes=scopes)
-            service = build('calendar', 'v3', credentials=creds)
-            now = datetime.datetime.utcnow().isoformat() + 'Z'
-
-            events_result = service.events().list(
-                calendarId='primary', timeMin=now,
-                maxResults=10, singleEvents=True,
-                orderBy='startTime').execute()
-            events = events_result.get('items', [])
+            events_result = (
+                service.events()
+                .list(
+                    calendarId="primary",
+                    timeMin=now,
+                    maxResults=10,
+                    singleEvents=True,
+                    orderBy="startTime",
+                )
+                .execute()
+            )
+            events = events_result.get("items", [])
         except Exception as e:
             logging.error(e)
             return ErrorArtifact(f"error retrieving calendar events {e}")

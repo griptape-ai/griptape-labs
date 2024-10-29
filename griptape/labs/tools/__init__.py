@@ -1,27 +1,27 @@
-from .google_drive.tool import GoogleDrive
-from .google_docs.tool import GoogleDocs
+from .base_google_tool import BaseGoogleTool
+from .base_aws_tool import BaseAwsTool
+from .google_drive.tool import GoogleDriveTool
+from .google_docs.tool import GoogleDocsTool
 from .google_cal.tool import GoogleCal
-from .google_gmail.tool import GoogleGmail
+from .google_gmail.tool import GoogleGmailTool
 from .aws_pricing.tool import AwsPricing
-from .aws_s3.tool import AwsS3
+from .aws_s3.tool import AwsS3Tool
 from .zoom.tool import Zoom
-from .openai_dalle.tool import OpenAiDallE
-from .sql_redshift.tool import SqlRedshiftClient
 from .proxycurl_client.tool import ProxycurlClient
 from .pdf_reader.tool import PdfReader
-from .aws_cli.tool import AwsCli
+from .aws_cli.tool import AwsCliTool
 
 __all__ = [
-    "GoogleDrive",
-    "GoogleDocs",
+    "BaseGoogleTool",
+    "GoogleDriveTool",
+    "GoogleDocsTool",
     "GoogleCal",
-    "GoogleGmail",
+    "GoogleGmailTool",
+    "BaseAwsTool",
     "AwsPricing",
-    "AwsS3",
+    "AwsS3Tool",
+    "AwsCliTool",
     "Zoom",
-    "OpenAiDallE",
-    "SqlRedshiftClient",
     "ProxycurlClient",
     "PdfReader",
-    "AwsCli"
 ]

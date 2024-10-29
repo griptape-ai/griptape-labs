@@ -1,75 +1,57 @@
-import json
-import logging
+from __future__ import annotations
+
 import base64
+import logging
 from email.message import EmailMessage
-from schema import Schema, Literal
-from attr import define, field
-from griptape.artifacts import BaseArtifact, TextArtifact, ErrorArtifact
-from griptape.core import BaseTool
-from griptape.core.decorators import activity
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
+
+from attrs import define, field
+from schema import Literal, Schema
+
+from griptape.artifacts import ErrorArtifact, InfoArtifact
+from griptape.tools import BaseGoogleTool
+from griptape.utils.decorators import activity
 
 
 @define
-class GoogleGmail(BaseTool):
-    service_account_creds: str = field(kw_only=True)
+class GoogleGmailTool(BaseGoogleTool):
+    CREATE_DRAFT_EMAIL_SCOPES = ["https://www.googleapis.com/auth/gmail.compose"]
 
-    @activity(config={
-        "description": "Can be used to create a draft email in gmail",
-        "schema": Schema({
-            Literal(
-                "to",
-                description="email address to send to"
-            ): str,
-            Literal(
-                "subject",
-                description="subject of the email"
-            ): str,
-            Literal(
-                "from",
-                description="email address to send from"
-            ): str,
-            Literal(
-                "body",
-                description="body of the email"
-            ): str,
-            Literal(
-                "inbox_owner",
-                description="email address of the inbox owner where the draft will be created. "
-                            "if not provided, use the from address"
-            ): str
-        })
-    })
-    def create_draft_email(self, params: dict) -> BaseArtifact:
+    owner_email: str = field(kw_only=True)
+
+    @activity(
+        config={
+            "description": "Can be used to create a draft email in GMail",
+            "schema": Schema(
+                {
+                    Literal("to", description="email address which to send to"): str,
+                    Literal("subject", description="subject of the email"): str,
+                    Literal("body", description="body of the email"): str,
+                },
+            ),
+        },
+    )
+    def create_draft_email(self, params: dict) -> InfoArtifact | ErrorArtifact:
         values = params["values"]
-        # Scopes are purposely defined within activity to allow for more granular control
-        scopes = ['https://www.googleapis.com/auth/gmail.compose']
-        try:
-            service_account_creds = json.loads(self.service_account_creds)
-        except Exception as e:
-            logging.error(e)
-            return ErrorArtifact(f"error parsing service account creds {e}")
 
         try:
-            creds = service_account.Credentials.from_service_account_info(service_account_creds, scopes=scopes)
-            delegated_creds = creds.with_subject(values["inbox_owner"])
-            service = build('gmail', 'v1', credentials=delegated_creds)
+            service = self._build_client(
+                scopes=self.CREATE_DRAFT_EMAIL_SCOPES,
+                service_name="gmail",
+                version="v1",
+                owner_email=self.owner_email,
+            )
 
             message = EmailMessage()
             message.set_content(values["body"])
-            message['To'] = values["to"]
-            message['From'] = values["from"]
-            message['Subject'] = values["subject"]
+            message["To"] = values["to"]
+            message["From"] = self.owner_email
+            message["Subject"] = values["subject"]
 
             encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
-            create_message = {
-                'message': {
-                    'raw': encoded_message
-                }
-            }
-            draft = service.users().drafts().create(userId='me', body=create_message).execute()
-            return TextArtifact(f'Draft Id: {draft["id"]}')
+            create_message = {"message": {"raw": encoded_message}}
+            draft = service.users().drafts().create(userId="me", body=create_message).execute()
+            return InfoArtifact(f'An email draft was successfully created (ID: {draft["id"]})')
+
         except Exception as error:
             logging.error(error)
-            return ErrorArtifact(f'Error creating draft email: {error}')
+            return ErrorArtifact(f"error creating draft email: {error}")

@@ -14,18 +14,19 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.9"
 
-griptape = ">= 0.12.2"
-
+griptape = "^0.33.1"
 google-api-python-client ="*"
 google-auth-httplib2 = "*"
 oauth2client = "*"
 zoomus = "*"
-stability-sdk = "*"
 pytest = "^7.3.1"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
 pytest-mock = "*"
+
+[tool.poetry.group.dev.dependencies]
+boto3-stubs = {extras = ["bedrock", "iam", "opensearch", "s3", "sagemaker", "sqs", "iot-data", "dynamodb", "redshift-data", "pricing"], version = "^1.34.105"}
 
 [build-system]
 requires = ["poetry-core"]
