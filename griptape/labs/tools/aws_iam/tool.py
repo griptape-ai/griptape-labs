@@ -6,7 +6,7 @@ from attrs import define, field
 from schema import Literal, Schema
 
 from griptape.artifacts import ErrorArtifact, ListArtifact, TextArtifact
-from griptape.tools import BaseAwsTool
+from griptape.labs.tools import BaseAwsTool
 from griptape.utils.decorators import activity, lazy_property
 
 if TYPE_CHECKING:
@@ -15,7 +15,9 @@ if TYPE_CHECKING:
 
 @define
 class AwsIamTool(BaseAwsTool):
-    _client: IAMClient = field(default=None, kw_only=True, alias="client", metadata={"serializable": False})
+    _client: IAMClient = field(
+        default=None, kw_only=True, alias="client", metadata={"serializable": False}
+    )
 
     @lazy_property()
     def client(self) -> IAMClient:
@@ -26,7 +28,9 @@ class AwsIamTool(BaseAwsTool):
             "description": "Can be use to get a policy for an AWS IAM user.",
             "schema": Schema(
                 {
-                    Literal("user_name", description="Username of the AWS IAM user."): str,
+                    Literal(
+                        "user_name", description="Username of the AWS IAM user."
+                    ): str,
                     Literal(
                         "policy_name",
                         description="PolicyName of the AWS IAM Policy embedded in the specified IAM user.",
@@ -57,21 +61,34 @@ class AwsIamTool(BaseAwsTool):
         config={
             "description": "Can be used to list policies for a given IAM user.",
             "schema": Schema(
-                {Literal("user_name", description="Username of the AWS IAM user for which to list policies."): str},
+                {
+                    Literal(
+                        "user_name",
+                        description="Username of the AWS IAM user for which to list policies.",
+                    ): str
+                },
             ),
         },
     )
     def list_user_policies(self, params: dict) -> ListArtifact | ErrorArtifact:
         try:
-            policies = self.client.list_user_policies(UserName=params["values"]["user_name"])
+            policies = self.client.list_user_policies(
+                UserName=params["values"]["user_name"]
+            )
             policy_names = policies["PolicyNames"]
 
-            attached_policies = self.client.list_attached_user_policies(UserName=params["values"]["user_name"])
+            attached_policies = self.client.list_attached_user_policies(
+                UserName=params["values"]["user_name"]
+            )
             attached_policy_names = [
-                p["PolicyName"] for p in attached_policies["AttachedPolicies"] if "PolicyName" in p
+                p["PolicyName"]
+                for p in attached_policies["AttachedPolicies"]
+                if "PolicyName" in p
             ]
 
-            return ListArtifact([TextArtifact(str(p)) for p in policy_names + attached_policy_names])
+            return ListArtifact(
+                [TextArtifact(str(p)) for p in policy_names + attached_policy_names]
+            )
         except Exception as e:
             return ErrorArtifact(f"error listing iam user policies: {e}")
 

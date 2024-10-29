@@ -7,7 +7,7 @@ from attrs import define
 from schema import Literal, Optional, Schema
 
 from griptape.artifacts import ErrorArtifact, InfoArtifact, ListArtifact, TextArtifact
-from griptape.tools import BaseGoogleTool
+from griptape.labs.tools import BaseGoogleTool
 from griptape.utils.decorators import activity
 
 

@@ -4,19 +4,17 @@ import base64
 import logging
 from email.message import EmailMessage
 
-from attrs import define, field
+from attrs import define
 from schema import Literal, Schema
 
 from griptape.artifacts import ErrorArtifact, InfoArtifact
-from griptape.tools import BaseGoogleTool
+from griptape.labs.tools import BaseGoogleTool
 from griptape.utils.decorators import activity
 
 
 @define
 class GoogleGmailTool(BaseGoogleTool):
     CREATE_DRAFT_EMAIL_SCOPES = ["https://www.googleapis.com/auth/gmail.compose"]
-
-    owner_email: str = field(kw_only=True)
 
     @activity(
         config={
@@ -38,7 +36,6 @@ class GoogleGmailTool(BaseGoogleTool):
                 scopes=self.CREATE_DRAFT_EMAIL_SCOPES,
                 service_name="gmail",
                 version="v1",
-                owner_email=self.owner_email,
             )
 
             message = EmailMessage()
@@ -49,8 +46,15 @@ class GoogleGmailTool(BaseGoogleTool):
 
             encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
             create_message = {"message": {"raw": encoded_message}}
-            draft = service.users().drafts().create(userId="me", body=create_message).execute()
-            return InfoArtifact(f'An email draft was successfully created (ID: {draft["id"]})')
+            draft = (
+                service.users()
+                .drafts()
+                .create(userId="me", body=create_message)
+                .execute()
+            )
+            return InfoArtifact(
+                f'An email draft was successfully created (ID: {draft["id"]})'
+            )
 
         except Exception as error:
             logging.error(error)

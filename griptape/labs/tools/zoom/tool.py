@@ -11,8 +11,10 @@ from attr import define, field
 @define
 class Zoom(BaseTool):
     DATE_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
+
     zoom_api_key: str = field(kw_only=True)
     zoom_api_secret: str = field(kw_only=True)
+    zoom_api_account_id: str = field(kw_only=True)
 
     @activity(
         config={
@@ -23,11 +25,10 @@ class Zoom(BaseTool):
     def list_users(self, param: dict) -> BaseArtifact:
         from zoomus import ZoomClient
 
-        zoom_api_key = self.zoom_api_key
-        zoom_api_secret = self.zoom_api_secret
-
         try:
-            client = ZoomClient(zoom_api_key, zoom_api_secret)
+            client = ZoomClient(
+                self.zoom_api_key, self.zoom_api_secret, self.zoom_api_account_id
+            )
             users_response = client.user.list()
             user_list = json.loads(users_response.content)
             if user_list.get("code") == 124:
@@ -56,11 +57,11 @@ class Zoom(BaseTool):
         from zoomus import ZoomClient
 
         values = params["values"]
-        zoom_api_key = self.zoom_api_key
-        zoom_api_secret = self.zoom_api_secret
 
         try:
-            client = ZoomClient(zoom_api_key, zoom_api_secret)
+            client = ZoomClient(
+                self.zoom_api_key, self.zoom_api_secret, self.zoom_api_account_id
+            )
             meeting_list = json.loads(
                 client.meeting.list(user_id=values["user_id"]).content
             )
@@ -98,11 +99,11 @@ class Zoom(BaseTool):
         from zoomus import ZoomClient
 
         values = params["values"]
-        zoom_api_key = self.zoom_api_key
-        zoom_api_secret = self.zoom_api_secret
 
         try:
-            client = ZoomClient(zoom_api_key, zoom_api_secret)
+            client = ZoomClient(
+                self.zoom_api_key, self.zoom_api_secret, self.zoom_api_account_id
+            )
             response = client.meeting.create(
                 topic=values["topic"],
                 start_time=datetime.datetime.strptime(

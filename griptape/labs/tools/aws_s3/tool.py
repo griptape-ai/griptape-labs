@@ -6,8 +6,14 @@ from typing import TYPE_CHECKING, Any
 from attrs import define, field
 from schema import Literal, Schema
 
-from griptape.artifacts import BlobArtifact, ErrorArtifact, InfoArtifact, ListArtifact, TextArtifact
-from griptape.tools import BaseAwsTool
+from griptape.artifacts import (
+    BlobArtifact,
+    ErrorArtifact,
+    InfoArtifact,
+    ListArtifact,
+    TextArtifact,
+)
+from griptape.labs.tools import BaseAwsTool
 from griptape.utils.decorators import activity, lazy_property
 
 if TYPE_CHECKING:
@@ -16,7 +22,9 @@ if TYPE_CHECKING:
 
 @define
 class AwsS3Tool(BaseAwsTool):
-    _client: S3Client = field(default=None, kw_only=True, alias="client", metadata={"serializable": False})
+    _client: S3Client = field(
+        default=None, kw_only=True, alias="client", metadata={"serializable": False}
+    )
 
     @lazy_property()
     def client(self) -> S3Client:
@@ -46,13 +54,20 @@ class AwsS3Tool(BaseAwsTool):
         config={
             "description": "Can be used to get an AWS S3 bucket policy.",
             "schema": Schema(
-                {Literal("bucket_name", description="The bucket name for which to get the bucket policy."): str},
+                {
+                    Literal(
+                        "bucket_name",
+                        description="The bucket name for which to get the bucket policy.",
+                    ): str
+                },
             ),
         },
     )
     def get_bucket_policy(self, params: dict) -> TextArtifact | ErrorArtifact:
         try:
-            policy = self.client.get_bucket_policy(Bucket=params["values"]["bucket_name"])
+            policy = self.client.get_bucket_policy(
+                Bucket=params["values"]["bucket_name"]
+            )
             return TextArtifact(policy)
         except Exception as e:
             return ErrorArtifact(f"error getting bucket policy: {e}")
@@ -62,8 +77,14 @@ class AwsS3Tool(BaseAwsTool):
             "description": "Can be used to get an access control list (ACL) of an object in the AWS S3 bucket.",
             "schema": Schema(
                 {
-                    Literal("bucket_name", description="Name of the AWS S3 bucket for which to get an ACL."): str,
-                    Literal("object_key", description="Key of the object for which to get the ACL information."): str,
+                    Literal(
+                        "bucket_name",
+                        description="Name of the AWS S3 bucket for which to get an ACL.",
+                    ): str,
+                    Literal(
+                        "object_key",
+                        description="Key of the object for which to get the ACL information.",
+                    ): str,
                 },
             ),
         },
@@ -90,12 +111,20 @@ class AwsS3Tool(BaseAwsTool):
     @activity(
         config={
             "description": "Can be used to list all objects in an AWS S3 bucket.",
-            "schema": Schema({Literal("bucket_name", description="The name of the S3 bucket to list."): str}),
+            "schema": Schema(
+                {
+                    Literal(
+                        "bucket_name", description="The name of the S3 bucket to list."
+                    ): str
+                }
+            ),
         },
     )
     def list_objects(self, params: dict) -> ListArtifact | ErrorArtifact:
         try:
-            objects = self.client.list_objects_v2(Bucket=params["values"]["bucket_name"])
+            objects = self.client.list_objects_v2(
+                Bucket=params["values"]["bucket_name"]
+            )
 
             if "Contents" not in objects:
                 return ErrorArtifact("no objects found in the bucket")
@@ -112,12 +141,17 @@ class AwsS3Tool(BaseAwsTool):
                     "memory_name": str,
                     "artifact_namespace": str,
                     "bucket_name": str,
-                    Literal("object_key", description="Destination object key name. For example, 'baz.txt'"): str,
+                    Literal(
+                        "object_key",
+                        description="Destination object key name. For example, 'baz.txt'",
+                    ): str,
                 },
             ),
         },
     )
-    def upload_memory_artifacts_to_s3(self, params: dict) -> InfoArtifact | ErrorArtifact:
+    def upload_memory_artifacts_to_s3(
+        self, params: dict
+    ) -> InfoArtifact | ErrorArtifact:
         memory = self.find_input_memory(params["values"]["memory_name"])
         artifact_namespace = params["values"]["artifact_namespace"]
         bucket_name = params["values"]["bucket_name"]
@@ -130,7 +164,9 @@ class AwsS3Tool(BaseAwsTool):
                 return ErrorArtifact("no artifacts found")
             elif len(artifacts) == 1:
                 try:
-                    self._upload_object(bucket_name, object_key, artifacts.value[0].value)
+                    self._upload_object(
+                        bucket_name, object_key, artifacts.value[0].value
+                    )
 
                     return InfoArtifact("uploaded successfully")
                 except Exception as e:
@@ -152,7 +188,10 @@ class AwsS3Tool(BaseAwsTool):
             "schema": Schema(
                 {
                     "bucket_name": str,
-                    Literal("object_key", description="Destination object key name. For example, 'baz.txt'"): str,
+                    Literal(
+                        "object_key",
+                        description="Destination object key name. For example, 'baz.txt'",
+                    ): str,
                     "content": str,
                 },
             ),
@@ -175,7 +214,10 @@ class AwsS3Tool(BaseAwsTool):
             "description": "Can be used to download objects from AWS S3",
             "schema": Schema(
                 {
-                    Literal("objects", description="A list of bucket name and object key pairs to download"): [
+                    Literal(
+                        "objects",
+                        description="A list of bucket name and object key pairs to download",
+                    ): [
                         {
                             Literal(
                                 "bucket_name",
@@ -196,7 +238,9 @@ class AwsS3Tool(BaseAwsTool):
         artifacts = []
         for object_info in objects:
             try:
-                obj = self.client.get_object(Bucket=object_info["bucket_name"], Key=object_info["object_key"])
+                obj = self.client.get_object(
+                    Bucket=object_info["bucket_name"], Key=object_info["object_key"]
+                )
 
                 content = obj["Body"].read()
                 artifacts.append(BlobArtifact(content, name=object_info["object_key"]))

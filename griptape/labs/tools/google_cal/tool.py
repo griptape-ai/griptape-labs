@@ -4,7 +4,7 @@ from griptape.artifacts import BaseArtifact, TextArtifact, ErrorArtifact
 from griptape.utils.decorators import activity
 from attr import define
 
-from griptape.labs.tools.base_google_tool import BaseGoogleTool
+from griptape.labs.tools import BaseGoogleTool
 
 
 @define

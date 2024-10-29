@@ -15,7 +15,7 @@ from griptape.artifacts import (
     ListArtifact,
     TextArtifact,
 )
-from griptape.tools import BaseGoogleTool
+from griptape.labs.tools import BaseGoogleTool
 from griptape.utils.decorators import activity
 
 
