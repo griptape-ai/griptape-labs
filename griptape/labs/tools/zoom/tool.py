@@ -9,7 +9,7 @@ from attr import define, field
 
 
 @define
-class Zoom(BaseTool):
+class ZoomTool(BaseTool):
     DATE_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
     zoom_api_key: str = field(kw_only=True)
