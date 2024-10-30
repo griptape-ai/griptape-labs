@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "griptape-tools-aws"
+version = "0.1.0"
+description = ""
+authors = ["Collin Dutter <collin@griptape.ai>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+boto3 = "^1.35.51"
+
+[tool.poetry.group.dev.dependencies]
+boto3-stubs = {extras = ["bedrock", "iam", "opensearch", "s3", "sagemaker", "sqs", "iot-data", "dynamodb", "redshift-data", "pricing"], version = "^1.34.105"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

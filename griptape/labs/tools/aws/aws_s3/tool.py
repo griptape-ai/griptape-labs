@@ -13,7 +13,7 @@ from griptape.artifacts import (
     ListArtifact,
     TextArtifact,
 )
-from griptape.labs.tools import BaseAwsTool
+from griptape.labs.tools.aws import BaseAwsTool
 from griptape.utils.decorators import activity, lazy_property
 
 if TYPE_CHECKING:

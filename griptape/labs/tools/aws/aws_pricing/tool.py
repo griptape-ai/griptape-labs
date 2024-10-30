@@ -2,7 +2,7 @@ import json
 import logging
 from typing import TYPE_CHECKING
 from griptape.artifacts import BaseArtifact, TextArtifact, ErrorArtifact
-from griptape.labs.tools import BaseAwsTool
+from griptape.labs.tools.aws import BaseAwsTool
 from griptape.utils.decorators import activity
 from schema import Schema, Literal
 from attr import define, field

@@ -6,7 +6,7 @@ from attrs import define, field
 from schema import Literal, Schema
 
 from griptape.artifacts import ErrorArtifact, ListArtifact, TextArtifact
-from griptape.labs.tools import BaseAwsTool
+from griptape.labs.tools.aws import BaseAwsTool
 from griptape.utils.decorators import activity, lazy_property
 
 if TYPE_CHECKING:

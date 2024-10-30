@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "griptape-tools-google"
+version = "0.1.0"
+description = ""
+authors = ["Collin Dutter <collin@griptape.ai>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+google-api-python-client = "^2.149.0"
+google-auth-httplib2 = "^0.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

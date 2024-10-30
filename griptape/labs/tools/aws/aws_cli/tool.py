@@ -2,7 +2,7 @@ from griptape.artifacts import BaseArtifact, TextArtifact, ErrorArtifact
 from schema import Schema, Literal
 from griptape.utils.decorators import activity
 from griptape.utils import minify_json, CommandRunner
-from griptape.labs.tools import BaseAwsTool
+from griptape.labs.tools.aws import BaseAwsTool
 from attr import define, field
 
 
